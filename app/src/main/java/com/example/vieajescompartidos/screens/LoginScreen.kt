@@ -1,5 +1,5 @@
 
-package com.rutashare.ui.screens
+package com.example.vieajescompartidos.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -124,7 +124,7 @@ fun LoginScreen(
             fontSize = 13.sp,
             modifier = Modifier
                 .align(Alignment.End)
-                .clickable { /* TODO */ }
+                .clickable { }
         )
 
         Spacer(modifier = Modifier.height(24.dp))

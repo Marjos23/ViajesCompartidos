@@ -12,13 +12,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.vieajescompartidos.ui.theme.VieajesCompartidosTheme
-import com.rutashare.ui.screens.HomeScreen
-import com.rutashare.ui.screens.LoginScreen
-import com.rutashare.ui.screens.ProfileScreen
-import com.rutashare.ui.screens.PublishTripScreen
-import com.rutashare.ui.screens.RegisterScreen
-import com.rutashare.ui.screens.SearchResultsScreen
-import com.rutashare.ui.screens.TripDetailScreen
+import com.example.vieajescompartidos.screens.HomeScreen
+import com.example.vieajescompartidos.screens.LoginScreen
+import com.example.vieajescompartidos.screens.ProfileScreen
+import com.example.vieajescompartidos.screens.PublishTripScreen
+import com.example.vieajescompartidos.screens.RegisterScreen
+import com.example.vieajescompartidos.screens.SearchResultsScreen
+import com.example.vieajescompartidos.screens.TripDetailScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

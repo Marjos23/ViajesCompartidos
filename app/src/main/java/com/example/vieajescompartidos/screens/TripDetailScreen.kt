@@ -1,4 +1,4 @@
-package com.rutashare.ui.screens
+package com.example.vieajescompartidos.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

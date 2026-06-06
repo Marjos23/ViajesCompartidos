@@ -1,4 +1,4 @@
-package com.rutashare.ui.screens
+package com.example.vieajescompartidos.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -122,20 +122,6 @@ fun PublishTripScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "−",
-                    color = RutaGreen,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .let { mod ->
-                            if (seats > 1) mod else mod
-                        }
-                        .then(
-                            Modifier.padding(0.dp)
-                        )
-                )
                 // workaround for clickable minus
                 TextButton(
                     onClick = { if (seats > 1) seats-- },
