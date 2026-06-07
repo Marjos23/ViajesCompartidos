@@ -1,4 +1,4 @@
-package com.rutashare.ui.screens
+package com.example.vieajescompartidos.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,9 +22,6 @@ import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 private val RutaGreenLight2 = Color(0xFFF0FDF4)
 private val RutaGreenBorder2 = Color(0xFF86EFAC)
 private val RutaGreenDark2 = Color(0xFF166534)
-private val RutaBorder2 = Color(0xFFE5E7EB)
-private val RutaFilterBg = Color(0xFFF3F4F6)
-private val RutaFilterText = Color(0xFF374151)
 
 data class TripResult(
     val initials: String,
@@ -41,6 +38,7 @@ fun SearchResultsScreen(
     route: String = "Manta → Guayaquil",
     onBackClick: () -> Unit,
     onTripClick: () -> Unit,
+    onHomeClick: () -> Unit = {},
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -53,24 +51,24 @@ fun SearchResultsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Top Bar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Text(
                 text = "← $route",
-                color = Color(0xFF111827),
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.CenterStart)
             )
         }
-        Divider(color = RutaBorder2)
+        Divider(color = MaterialTheme.colorScheme.outlineVariant)
 
         // Filter chips
         Row(
@@ -108,7 +106,7 @@ fun SearchResultsScreen(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        BottomNavBar(activeTab = "buscar", onPublishClick = onPublishClick, onProfileClick = onProfileClick)
+        BottomNavBar(activeTab = "buscar", onHomeClick = onHomeClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
     }
 }
 
@@ -116,12 +114,12 @@ fun SearchResultsScreen(
 fun FilterChipItem(label: String, selected: Boolean) {
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = if (selected) RutaGreenLight2 else RutaFilterBg,
+        color = if (selected) RutaGreenLight2 else MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(1.dp, if (selected) RutaGreenBorder2 else Color.Transparent)
     ) {
         Text(
             text = label,
-            color = if (selected) RutaGreenDark2 else RutaFilterText,
+            color = if (selected) RutaGreenDark2 else MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 11.sp,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         )
@@ -133,8 +131,8 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, RutaBorder2)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(
@@ -159,7 +157,7 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = trip.driverName,
-                        color = Color(0xFF111827),
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -182,7 +180,7 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "🕐 ${trip.hour}  •  💺 ${trip.seats} cupo${if (trip.seats != 1) "s" else ""}  •  💵 ${trip.price}",
-                color = Color(0xFF374151),
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 12.sp
             )
         }
@@ -192,5 +190,5 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun SearchResultsScreenPreview() {
-    SearchResultsScreen(onBackClick = {}, onTripClick = {}, onPublishClick = {}, onProfileClick = {})
+    SearchResultsScreen(onBackClick = {}, onTripClick = {}, onPublishClick = {}, onProfileClick = {}, onHomeClick = {})
 }

@@ -1,4 +1,4 @@
-package com.rutashare.ui.screens
+package com.example.vieajescompartidos.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,8 +17,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vieajescompartidos.ui.theme.RutaCard
-import com.example.vieajescompartidos.ui.theme.RutaGray
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 
@@ -41,7 +39,7 @@ fun PublishTripScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Top bar
         Box(
@@ -88,7 +86,7 @@ fun PublishTripScreen(
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-            Divider(color = Color(0xFFE5E7EB))
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Fecha y hora
@@ -109,7 +107,7 @@ fun PublishTripScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            Divider(color = Color(0xFFE5E7EB))
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Cupos
@@ -117,25 +115,11 @@ fun PublishTripScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color(0xFFE5E7EB), RoundedCornerShape(10.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(10.dp))
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "−",
-                    color = RutaGreen,
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .let { mod ->
-                            if (seats > 1) mod else mod
-                        }
-                        .then(
-                            Modifier.padding(0.dp)
-                        )
-                )
                 // workaround for clickable minus
                 TextButton(
                     onClick = { if (seats > 1) seats-- },
@@ -146,7 +130,7 @@ fun PublishTripScreen(
                 }
                 Text(
                     text = seats.toString(),
-                    color = Color(0xFF111827),
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -160,7 +144,7 @@ fun PublishTripScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            Divider(color = Color(0xFFE5E7EB))
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Aporte
@@ -183,12 +167,12 @@ fun PublishTripScreen(
                 minLines = 3,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = RutaGreen,
-                    unfocusedBorderColor = RutaGray,
-                    focusedTextColor = Color(0xFF111827),
-                    unfocusedTextColor = Color(0xFF111827),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                     cursorColor = RutaGreen,
-                    focusedContainerColor = Color(0xFFF9FAFB),
-                    unfocusedContainerColor = Color(0xFFF9FAFB)
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -218,6 +202,7 @@ fun PublishTripScreen(
 
         BottomNavBar(
             activeTab = "publicar",
+            onHomeClick = onHomeClick,
             onSearchClick = onSearchClick,
             onPublishClick = {},
             onProfileClick = onProfileClick
@@ -229,7 +214,7 @@ fun PublishTripScreen(
 fun SectionLabel(text: String) {
     Text(
         text = text,
-        color = Color(0xFF374151),
+        color = MaterialTheme.colorScheme.onSurface,
         fontSize = 13.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(bottom = 6.dp)
@@ -252,12 +237,12 @@ fun TripOutlinedTextField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = RutaGreen,
-            unfocusedBorderColor = Color(0xFFD1D5DB),
-            focusedTextColor = Color(0xFF111827),
-            unfocusedTextColor = Color(0xFF111827),
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
             cursorColor = RutaGreen,
-            focusedContainerColor = Color(0xFFF9FAFB),
-            unfocusedContainerColor = Color(0xFFF9FAFB)
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = RoundedCornerShape(10.dp),
         modifier = modifier

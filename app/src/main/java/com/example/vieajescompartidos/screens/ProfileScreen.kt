@@ -1,4 +1,4 @@
-package com.rutashare.ui.screens
+package com.example.vieajescompartidos.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,13 +22,9 @@ import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 
 private val ProfileGreenLight = Color(0xFFD1FAE5)
 private val ProfileGreenDark = Color(0xFF065F46)
-private val ProfileBorder = Color(0xFFE5E7EB)
 private val ProfileYellow = Color(0xFFFEF3C7)
 private val ProfileYellowBorder = Color(0xFFFCD34D)
 private val ProfileYellowText = Color(0xFF92400E)
-private val ProfileBgGray = Color(0xFFF9FAFB)
-private val ProfileTextDark = Color(0xFF111827)
-private val ProfileTextMid = Color(0xFF374151)
 private val ProfileRed = Color(0xFFDC2626)
 
 @Composable
@@ -46,7 +42,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Top bar
         Box(
@@ -103,7 +99,7 @@ fun ProfileScreen(
 
             Text(
                 text = "Valentina Torres",
-                color = ProfileTextDark,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -122,7 +118,7 @@ fun ProfileScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = ProfileBorder)
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Estadísticas
@@ -138,8 +134,8 @@ fun ProfileScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
-                colors = CardDefaults.cardColors(containerColor = ProfileBgGray),
-                border = BorderStroke(1.dp, ProfileBorder)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Row(
                     modifier = Modifier
@@ -154,13 +150,13 @@ fun ProfileScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = ProfileBorder)
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Ajustes
             Text(
                 text = "Ajustes del perfil",
-                color = ProfileTextDark,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
@@ -179,6 +175,7 @@ fun ProfileScreen(
 
         BottomNavBar(
             activeTab = "perfil",
+            onHomeClick = onHomeClick,
             onSearchClick = onSearchClick,
             onPublishClick = onPublishClick
         )
@@ -216,7 +213,7 @@ fun ProfileMenuItem(
     onClick: () -> Unit,
     isDestructive: Boolean = false
 ) {
-    val textColor = if (isDestructive) Color(0xFFDC2626) else Color(0xFF374151)
+    val textColor = if (isDestructive) Color(0xFFDC2626) else MaterialTheme.colorScheme.onSurface
 
     Card(
         modifier = Modifier
@@ -224,8 +221,8 @@ fun ProfileMenuItem(
             .padding(vertical = 3.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, Color(0xFFE5E7EB))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier
@@ -235,7 +232,7 @@ fun ProfileMenuItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = "$icon  $label", color = textColor, fontSize = 13.sp)
-            Text(text = "›", color = Color(0xFF9CA3AF), fontSize = 18.sp, fontWeight = FontWeight.Light)
+            Text(text = "›", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 18.sp, fontWeight = FontWeight.Light)
         }
     }
 }
