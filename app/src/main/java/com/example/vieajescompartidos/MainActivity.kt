@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             VieajesCompartidosTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavigation()
+                    AppNavigation(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -35,10 +36,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = "login"
+    ) {
         composable("login") {
             LoginScreen(
                 onLoginClick = { navController.navigate("home") { popUpTo("login") { inclusive = true } } },
@@ -55,6 +60,7 @@ fun AppNavigation() {
 
         composable("home") {
             HomeScreen(
+                onHomeClick = { navController.navigate("home") { popUpTo("home") { inclusive = true } } },
                 onSearchClick = { navController.navigate("search") },
                 onPublishClick = { navController.navigate("publish") },
                 onProfileClick = { navController.navigate("profile") }
@@ -65,6 +71,7 @@ fun AppNavigation() {
             SearchResultsScreen(
                 onBackClick = { navController.popBackStack() },
                 onTripClick = { navController.navigate("trip_detail") },
+                onHomeClick = { navController.navigate("home") { popUpTo("home") { inclusive = true } } },
                 onPublishClick = { navController.navigate("publish") },
                 onProfileClick = { navController.navigate("profile") }
             )
@@ -75,6 +82,7 @@ fun AppNavigation() {
                 onBackClick = { navController.popBackStack() },
                 onJoinClick = { /* TODO */ },
                 onMessageClick = { /* TODO */ },
+                onHomeClick = { navController.navigate("home") { popUpTo("home") { inclusive = true } } },
                 onPublishClick = { navController.navigate("publish") },
                 onProfileClick = { navController.navigate("profile") }
             )

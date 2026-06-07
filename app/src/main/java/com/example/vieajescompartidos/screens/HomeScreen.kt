@@ -10,24 +10,22 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vieajescompartidos.ui.theme.RutaCard
-import com.example.vieajescompartidos.ui.theme.RutaDark
-import com.example.vieajescompartidos.ui.theme.RutaGray
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 
 val RutaGreenLight = Color(0xFFF0FDF4)
 val RutaGreenBorder = Color(0xFF86EFAC)
 val RutaGreenDark = Color(0xFF166534)
-val RutaBorder = Color(0xFFE5E7EB)
 
 @Composable
 fun HomeScreen(
+    onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
@@ -38,7 +36,7 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Top Bar
         Box(
@@ -73,7 +71,7 @@ fun HomeScreen(
             // Saludo
             Text(
                 text = "Hola, Valentina 👋",
-                color = Color(0xFF111827),
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -89,7 +87,7 @@ fun HomeScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FAFB)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 border = CardDefaults.outlinedCardBorder()
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
@@ -107,12 +105,12 @@ fun HomeScreen(
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = RutaGreen,
-                            unfocusedBorderColor = RutaGray,
-                            focusedTextColor = Color(0xFF111827),
-                            unfocusedTextColor = Color(0xFF111827),
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                             cursorColor = RutaGreen,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
                         ),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -134,12 +132,12 @@ fun HomeScreen(
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = RutaGreen,
-                            unfocusedBorderColor = RutaGray,
-                            focusedTextColor = Color(0xFF111827),
-                            unfocusedTextColor = Color(0xFF111827),
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                             cursorColor = RutaGreen,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
                         ),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -187,13 +185,13 @@ fun HomeScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = RutaBorder)
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Últimas búsquedas
             Text(
                 text = "Últimas búsquedas",
-                color = Color(0xFF111827),
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -207,7 +205,7 @@ fun HomeScreen(
         }
 
         // Bottom Navigation Bar
-        BottomNavBar(activeTab = "inicio", onSearchClick = onSearchClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
+        BottomNavBar(activeTab = "inicio", onHomeClick = onHomeClick, onSearchClick = onSearchClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
     }
 }
 
@@ -216,12 +214,12 @@ fun RecentSearchItem(text: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, RutaBorder)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Text(
             text = text,
-            color = Color(0xFF374151),
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 13.sp,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)
         )
@@ -231,21 +229,22 @@ fun RecentSearchItem(text: String) {
 @Composable
 fun BottomNavBar(
     activeTab: String,
+    onHomeClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
     onPublishClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
     val activeColor = RutaGreen
-    val inactiveColor = Color(0xFF9CA3AF)
+    val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        NavBarItem(icon = "🏠", label = "Inicio", color = if (activeTab == "inicio") activeColor else inactiveColor, onClick = {})
+        NavBarItem(icon = "🏠", label = "Inicio", color = if (activeTab == "inicio") activeColor else inactiveColor, onClick = onHomeClick)
         NavBarItem(icon = "🔍", label = "Buscar", color = if (activeTab == "buscar") activeColor else inactiveColor, onClick = onSearchClick)
         NavBarItem(icon = "➕", label = "Publicar", color = if (activeTab == "publicar") activeColor else inactiveColor, onClick = onPublishClick)
         NavBarItem(icon = "👤", label = "Perfil", color = if (activeTab == "perfil") activeColor else inactiveColor, onClick = onProfileClick)
@@ -268,5 +267,5 @@ fun NavBarItem(icon: String, label: String, color: Color, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onSearchClick = {}, onPublishClick = {}, onProfileClick = {})
+    HomeScreen(onHomeClick = {}, onSearchClick = {}, onPublishClick = {}, onProfileClick = {})
 }

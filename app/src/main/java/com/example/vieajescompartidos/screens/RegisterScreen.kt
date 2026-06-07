@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -18,9 +19,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vieajescompartidos.ui.theme.RutaCard
-import com.example.vieajescompartidos.ui.theme.RutaDark
-import com.example.vieajescompartidos.ui.theme.RutaGray
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 
@@ -41,7 +39,7 @@ fun RegisterScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(RutaDark)
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -196,7 +194,7 @@ private fun RegisterField(
 ) {
     Text(
         text = label,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.onBackground,
         fontSize = 14.sp,
         modifier = Modifier
             .fillMaxWidth()
@@ -212,12 +210,12 @@ private fun RegisterField(
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = RutaGreen,
-            unfocusedBorderColor = RutaGray,
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
             cursorColor = RutaGreen,
-            focusedContainerColor = RutaCard,
-            unfocusedContainerColor = RutaCard
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier.fillMaxWidth()

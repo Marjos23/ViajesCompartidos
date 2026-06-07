@@ -22,37 +22,36 @@ import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 private val GreenLight = Color(0xFFF0FDF4)
 private val GreenBorder = Color(0xFF34D399)
 private val GreenDark = Color(0xFF065F46)
-private val BorderColor = Color(0xFFE5E7EB)
-private val BgGray = Color(0xFFF9FAFB)
 
 @Composable
 fun TripDetailScreen(
     onBackClick: () -> Unit,
     onJoinClick: () -> Unit,
     onMessageClick: () -> Unit,
+    onHomeClick: () -> Unit = {},
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Top bar
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Text(
                 text = "← Detalle del viaje",
-                color = Color(0xFF111827),
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
         }
-        Divider(color = BorderColor)
+        Divider(color = MaterialTheme.colorScheme.outlineVariant)
 
         Column(
             modifier = Modifier
@@ -91,7 +90,7 @@ fun TripDetailScreen(
                     Column {
                         Text(
                             text = "Carlos Mendoza",
-                            color = Color(0xFF111827),
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -118,13 +117,13 @@ fun TripDetailScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = BorderColor)
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Detalles del viaje
             Text(
                 text = "Detalles del viaje",
-                color = Color(0xFF6B7280),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -133,8 +132,8 @@ fun TripDetailScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
-                colors = CardDefaults.cardColors(containerColor = BgGray),
-                border = BorderStroke(1.dp, BorderColor)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     TripDetailRow(text = "📍  Salida: Manta — Centro comercial")
@@ -147,7 +146,7 @@ fun TripDetailScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = BorderColor)
+            Divider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(16.dp))
 
             // Botón principal
@@ -198,7 +197,7 @@ fun TripDetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        BottomNavBar(activeTab = "buscar", onPublishClick = onPublishClick, onProfileClick = onProfileClick)
+        BottomNavBar(activeTab = "buscar", onHomeClick = onHomeClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
     }
 }
 
@@ -206,7 +205,7 @@ fun TripDetailScreen(
 fun TripDetailRow(text: String, isGreen: Boolean = false) {
     Text(
         text = text,
-        color = if (isGreen) RutaGreen else Color(0xFF374151),
+        color = if (isGreen) RutaGreen else MaterialTheme.colorScheme.onSurface,
         fontSize = 13.sp,
         fontWeight = if (isGreen) FontWeight.SemiBold else FontWeight.Normal
     )
@@ -215,5 +214,5 @@ fun TripDetailRow(text: String, isGreen: Boolean = false) {
 @Preview(showBackground = true)
 @Composable
 fun TripDetailScreenPreview() {
-    TripDetailScreen(onBackClick = {}, onJoinClick = {}, onMessageClick = {}, onPublishClick = {}, onProfileClick = {})
+    TripDetailScreen(onBackClick = {}, onJoinClick = {}, onMessageClick = {}, onPublishClick = {}, onProfileClick = {}, onHomeClick = {})
 }
