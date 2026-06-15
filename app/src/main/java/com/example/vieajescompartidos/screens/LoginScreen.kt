@@ -23,14 +23,48 @@ import com.example.vieajescompartidos.ui.theme.RutaGray
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vieajescompartidos.ui.viewmodel.LoginViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
+
 @Composable
 fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onRegisterClick: () -> Unit,
+    viewModel: LoginViewModel = viewModel(factory = ViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.isLoginSuccessful) {
+        if (uiState.isLoginSuccessful) {
+            onLoginSuccess()
+        }
+    }
+
+    LoginContent(
+        email = uiState.email,
+        password = uiState.password,
+        isLoading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onLoginClick = viewModel::login,
+        onRegisterClick = onRegisterClick
+    )
+}
+
+@Composable
+fun LoginContent(
+    email: String,
+    password: String,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,10 +98,11 @@ fun LoginScreen(
 
        OutlinedTextField(
            value = email,
-           onValueChange = { email = it },
+           onValueChange = onEmailChange,
            placeholder = { Text("ejemplo@correo.com", color = RutaTextSecondary) },
            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
            singleLine = true,
+           enabled = !isLoading,
            colors = OutlinedTextFieldDefaults.colors(
                focusedBorderColor = RutaGreen,
                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
@@ -96,11 +131,12 @@ fun LoginScreen(
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = onPasswordChange,
             placeholder = { Text("••••••••", color = RutaTextSecondary) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
+            enabled = !isLoading,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = RutaGreen,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
@@ -126,23 +162,37 @@ fun LoginScreen(
                 .clickable { }
         )
 
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         // Botón Iniciar sesión
         Button(
             onClick = onLoginClick,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RutaGreen)
         ) {
-            Text(
-                text = "Iniciar sesión",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+            } else {
+                Text(
+                    text = "Iniciar sesión",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -152,18 +202,17 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Divider(modifier = Modifier.weight(1f), color = RutaGray)
+            HorizontalDivider(modifier = Modifier.weight(1f), color = RutaGray)
             Text(
                 text = "  o continúa con  ",
                 color = RutaTextSecondary,
                 fontSize = 13.sp
             )
-            Divider(modifier = Modifier.weight(1f), color = RutaGray)
+            HorizontalDivider(modifier = Modifier.weight(1f), color = RutaGray)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        //------
         // Link registro
         Row {
             Text(text = "¿No tienes cuenta? ", color = RutaTextSecondary, fontSize = 14.sp)
@@ -181,5 +230,14 @@ fun LoginScreen(
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(onLoginClick = {}, onRegisterClick = {})
+    LoginContent(
+        email = "",
+        password = "",
+        isLoading = false,
+        errorMessage = null,
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLoginClick = {},
+        onRegisterClick = {}
+    )
 }

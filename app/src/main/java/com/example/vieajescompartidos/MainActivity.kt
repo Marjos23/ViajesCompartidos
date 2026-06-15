@@ -46,7 +46,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     ) {
         composable("login") {
             LoginScreen(
-                onLoginClick = { navController.navigate("home") { popUpTo("login") { inclusive = true } } },
+                onLoginSuccess = { navController.navigate("home") { popUpTo("login") { inclusive = true } } },
                 onRegisterClick = { navController.navigate("register") }
             )
         }

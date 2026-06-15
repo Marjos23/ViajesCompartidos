@@ -10,14 +10,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
+import com.example.vieajescompartidos.ui.viewmodel.HomeViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
 
 val RutaGreenLight = Color(0xFFF0FDF4)
 val RutaGreenBorder = Color(0xFF86EFAC)
@@ -28,11 +31,38 @@ fun HomeScreen(
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,
     onPublishClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    viewModel: HomeViewModel = viewModel(factory = ViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    HomeContent(
+        userName = uiState.userName,
+        origen = uiState.origen,
+        destino = uiState.destino,
+        recentSearches = uiState.recentSearches,
+        onOrigenChange = viewModel::onOrigenChange,
+        onDestinoChange = viewModel::onDestinoChange,
+        onHomeClick = onHomeClick,
+        onSearchClick = onSearchClick,
+        onPublishClick = onPublishClick,
+        onProfileClick = onProfileClick
+    )
+}
+
+@Composable
+fun HomeContent(
+    userName: String,
+    origen: String,
+    destino: String,
+    recentSearches: List<String>,
+    onOrigenChange: (String) -> Unit,
+    onDestinoChange: (String) -> Unit,
+    onHomeClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
-    var origen by remember { mutableStateOf("") }
-    var destino by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +100,7 @@ fun HomeScreen(
 
             // Saludo
             Text(
-                text = "Hola, Valentina 👋",
+                text = "Hola, $userName 👋",
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
@@ -100,7 +130,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     OutlinedTextField(
                         value = origen,
-                        onValueChange = { origen = it },
+                        onValueChange = onOrigenChange,
                         placeholder = { Text("📍 Manta, Manabí", color = RutaTextSecondary, fontSize = 13.sp) },
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
@@ -127,7 +157,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     OutlinedTextField(
                         value = destino,
-                        onValueChange = { destino = it },
+                        onValueChange = onDestinoChange,
                         placeholder = { Text("🏁 Guayaquil, Guayas", color = RutaTextSecondary, fontSize = 13.sp) },
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
@@ -185,7 +215,7 @@ fun HomeScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Últimas búsquedas
@@ -197,9 +227,10 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            RecentSearchItem(text = "📍 Manta → Guayaquil · hace 2 días")
-            Spacer(modifier = Modifier.height(8.dp))
-            RecentSearchItem(text = "📍 Manta → Quito · hace 5 días")
+            recentSearches.forEach { search ->
+                RecentSearchItem(text = search)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -267,5 +298,16 @@ fun NavBarItem(icon: String, label: String, color: Color, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onHomeClick = {}, onSearchClick = {}, onPublishClick = {}, onProfileClick = {})
+    HomeContent(
+        userName = "Valentina",
+        origen = "",
+        destino = "",
+        recentSearches = listOf("📍 Manta → Guayaquil · hace 2 días"),
+        onOrigenChange = {},
+        onDestinoChange = {},
+        onHomeClick = {},
+        onSearchClick = {},
+        onPublishClick = {},
+        onProfileClick = {}
+    )
 }
