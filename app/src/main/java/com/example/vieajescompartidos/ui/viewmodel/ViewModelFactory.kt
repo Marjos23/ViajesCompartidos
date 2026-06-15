@@ -6,7 +6,10 @@ import com.example.vieajescompartidos.data.repository.AuthRepository
 import com.example.vieajescompartidos.data.repository.FakeAuthRepository
 
 class ViewModelFactory : ViewModelProvider.Factory {
-    private val authRepository: AuthRepository = FakeAuthRepository()
+    
+    companion object {
+        private val authRepository: AuthRepository by lazy { FakeAuthRepository() }
+    }
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {

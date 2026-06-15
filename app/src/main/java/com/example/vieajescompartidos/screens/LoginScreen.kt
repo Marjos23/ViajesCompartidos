@@ -4,8 +4,10 @@ package com.example.vieajescompartidos.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -69,10 +71,12 @@ fun LoginContent(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 32.dp),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 32.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.weight(1f))
         Text(text = "🚗", fontSize = 56.sp)
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -224,6 +228,7 @@ fun LoginContent(
                 modifier = Modifier.clickable { onRegisterClick() }
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
