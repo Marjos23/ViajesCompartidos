@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,8 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
+import com.example.vieajescompartidos.ui.viewmodel.TripDetailViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
 
 private val GreenLight = Color(0xFFF0FDF4)
 private val GreenBorder = Color(0xFF34D399)
@@ -29,6 +34,50 @@ fun TripDetailScreen(
     onJoinClick: () -> Unit,
     onMessageClick: () -> Unit,
     onHomeClick: () -> Unit = {},
+    onPublishClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    viewModel: TripDetailViewModel = viewModel(factory = ViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    TripDetailContent(
+        driverName = uiState.driverName,
+        driverInitials = uiState.driverInitials,
+        rating = uiState.rating,
+        completedTrips = uiState.completedTrips,
+        origin = uiState.origin,
+        destination = uiState.destination,
+        departureTime = uiState.departureTime,
+        availableSeats = uiState.availableSeats,
+        totalSeats = uiState.totalSeats,
+        price = uiState.price,
+        vehicle = uiState.vehicle,
+        onBackClick = onBackClick,
+        onJoinClick = onJoinClick,
+        onMessageClick = onMessageClick,
+        onHomeClick = onHomeClick,
+        onPublishClick = onPublishClick,
+        onProfileClick = onProfileClick
+    )
+}
+
+@Composable
+fun TripDetailContent(
+    driverName: String,
+    driverInitials: String,
+    rating: String,
+    completedTrips: Int,
+    origin: String,
+    destination: String,
+    departureTime: String,
+    availableSeats: Int,
+    totalSeats: Int,
+    price: String,
+    vehicle: String,
+    onBackClick: () -> Unit,
+    onJoinClick: () -> Unit,
+    onMessageClick: () -> Unit,
+    onHomeClick: () -> Unit,
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -51,7 +100,7 @@ fun TripDetailScreen(
                 fontWeight = FontWeight.Bold
             )
         }
-        Divider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         Column(
             modifier = Modifier
@@ -80,7 +129,7 @@ fun TripDetailScreen(
                             .background(GreenLight, CircleShape)
                     ) {
                         Text(
-                            text = "CM",
+                            text = driverInitials,
                             color = GreenDark,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
@@ -89,13 +138,13 @@ fun TripDetailScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Carlos Mendoza",
+                            text = driverName,
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "⭐ 4.8 · 23 viajes completados",
+                            text = "⭐ $rating · $completedTrips viajes completados",
                             color = RutaTextSecondary,
                             fontSize = 12.sp
                         )
@@ -117,7 +166,7 @@ fun TripDetailScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Detalles del viaje
@@ -136,17 +185,17 @@ fun TripDetailScreen(
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TripDetailRow(text = "📍  Salida: Manta — Centro comercial")
-                    TripDetailRow(text = "🏁  Llegada: Guayaquil — Terminal TV")
-                    TripDetailRow(text = "🕕  Hora de salida: 6:00 AM")
-                    TripDetailRow(text = "💺  Cupos disponibles: 3 de 4")
-                    TripDetailRow(text = "💵  Aporte por pasajero: \$4.00", isGreen = true)
-                    TripDetailRow(text = "🚗  Toyota Corolla · ABC-1234")
+                    TripDetailRow(text = "📍  Salida: $origin")
+                    TripDetailRow(text = "🏁  Llegada: $destination")
+                    TripDetailRow(text = "🕕  Hora de salida: $departureTime")
+                    TripDetailRow(text = "💺  Cupos disponibles: $availableSeats de $totalSeats")
+                    TripDetailRow(text = "💵  Aporte por pasajero: $price", isGreen = true)
+                    TripDetailRow(text = "🚗  $vehicle")
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(16.dp))
 
             // Botón principal
@@ -214,5 +263,23 @@ fun TripDetailRow(text: String, isGreen: Boolean = false) {
 @Preview(showBackground = true)
 @Composable
 fun TripDetailScreenPreview() {
-    TripDetailScreen(onBackClick = {}, onJoinClick = {}, onMessageClick = {}, onPublishClick = {}, onProfileClick = {}, onHomeClick = {})
+    TripDetailContent(
+        driverName = "Carlos Mendoza",
+        driverInitials = "CM",
+        rating = "4.8",
+        completedTrips = 23,
+        origin = "Manta",
+        destination = "Guayaquil",
+        departureTime = "6:00 AM",
+        availableSeats = 3,
+        totalSeats = 4,
+        price = "$4.00",
+        vehicle = "Toyota Corolla",
+        onBackClick = {},
+        onJoinClick = {},
+        onMessageClick = {},
+        onHomeClick = {},
+        onPublishClick = {},
+        onProfileClick = {}
+    )
 }

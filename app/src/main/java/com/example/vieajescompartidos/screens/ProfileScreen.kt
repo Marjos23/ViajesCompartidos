@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,15 +18,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
+import com.example.vieajescompartidos.ui.viewmodel.ProfileViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
 
 private val ProfileGreenLight = Color(0xFFD1FAE5)
 private val ProfileGreenDark = Color(0xFF065F46)
 private val ProfileYellow = Color(0xFFFEF3C7)
 private val ProfileYellowBorder = Color(0xFFFCD34D)
 private val ProfileYellowText = Color(0xFF92400E)
-private val ProfileRed = Color(0xFFDC2626)
 
 @Composable
 fun ProfileScreen(
@@ -37,7 +41,49 @@ fun ProfileScreen(
     onNotificationsClick: () -> Unit = {},
     onHistoryClick: () -> Unit = {},
     onSecurityClick: () -> Unit = {},
-    onLogoutClick: () -> Unit = {}
+    onLogoutClick: () -> Unit = {},
+    viewModel: ProfileViewModel = viewModel(factory = ViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ProfileContent(
+        userName = uiState.userName,
+        userEmail = uiState.userEmail,
+        initials = uiState.initials,
+        rating = uiState.rating,
+        totalTrips = uiState.totalTrips,
+        pendingTrips = uiState.pendingTrips,
+        isVerified = uiState.isVerified,
+        onHomeClick = onHomeClick,
+        onSearchClick = onSearchClick,
+        onPublishClick = onPublishClick,
+        onEditProfileClick = onEditProfileClick,
+        onVehicleClick = onVehicleClick,
+        onNotificationsClick = onNotificationsClick,
+        onHistoryClick = onHistoryClick,
+        onSecurityClick = onSecurityClick,
+        onLogoutClick = onLogoutClick
+    )
+}
+
+@Composable
+fun ProfileContent(
+    userName: String,
+    userEmail: String,
+    initials: String,
+    rating: String,
+    totalTrips: String,
+    pendingTrips: String,
+    isVerified: Boolean,
+    onHomeClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onPublishClick: () -> Unit,
+    onEditProfileClick: () -> Unit,
+    onVehicleClick: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onSecurityClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -78,7 +124,7 @@ fun ProfileScreen(
                         .background(ProfileGreenLight, CircleShape)
                 ) {
                     Text(
-                        text = "VT",
+                        text = initials,
                         color = ProfileGreenDark,
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp
@@ -98,13 +144,13 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Valentina Torres",
+                text = userName,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "valentina.torres@email.com",
+                text = userEmail,
                 color = RutaTextSecondary,
                 fontSize = 13.sp
             )
@@ -113,12 +159,14 @@ fun ProfileScreen(
 
             // Badges
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Badge(text = "✓ Verificado", bgColor = ProfileGreenLight, borderColor = Color(0xFF34D399), textColor = ProfileGreenDark)
-                Badge(text = "⭐ 4.7", bgColor = ProfileYellow, borderColor = ProfileYellowBorder, textColor = ProfileYellowText)
+                if (isVerified) {
+                    Badge(text = "✓ Verificado", bgColor = ProfileGreenLight, borderColor = Color(0xFF34D399), textColor = ProfileGreenDark)
+                }
+                Badge(text = "⭐ $rating", bgColor = ProfileYellow, borderColor = ProfileYellowBorder, textColor = ProfileYellowText)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Estadísticas
@@ -143,14 +191,14 @@ fun ProfileScreen(
                         .padding(vertical = 12.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    StatItem(value = "12", label = "viajes")
-                    StatItem(value = "4.7", label = "calificación")
-                    StatItem(value = "3", label = "pendientes")
+                    StatItem(value = totalTrips, label = "viajes")
+                    StatItem(value = rating, label = "calificación")
+                    StatItem(value = pendingTrips, label = "pendientes")
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
             // Ajustes
@@ -240,5 +288,22 @@ fun ProfileMenuItem(
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(onHomeClick = {}, onSearchClick = {}, onPublishClick = {})
+    ProfileContent(
+        userName = "Valentina Torres",
+        userEmail = "valentina@email.com",
+        initials = "VT",
+        rating = "4.7",
+        totalTrips = "12",
+        pendingTrips = "3",
+        isVerified = true,
+        onHomeClick = {},
+        onSearchClick = {},
+        onPublishClick = {},
+        onEditProfileClick = {},
+        onVehicleClick = {},
+        onNotificationsClick = {},
+        onHistoryClick = {},
+        onSecurityClick = {},
+        onLogoutClick = {}
+    )
 }

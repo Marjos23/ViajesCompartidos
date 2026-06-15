@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,8 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
+import com.example.vieajescompartidos.ui.viewmodel.SearchResultsViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
 
 private val RutaGreenLight2 = Color(0xFFF0FDF4)
 private val RutaGreenBorder2 = Color(0xFF86EFAC)
@@ -35,19 +40,36 @@ data class TripResult(
 
 @Composable
 fun SearchResultsScreen(
-    route: String = "Manta → Guayaquil",
     onBackClick: () -> Unit,
     onTripClick: () -> Unit,
     onHomeClick: () -> Unit = {},
     onPublishClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    viewModel: SearchResultsViewModel = viewModel(factory = ViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    SearchResultsContent(
+        route = uiState.route,
+        results = uiState.results,
+        onBackClick = onBackClick,
+        onTripClick = onTripClick,
+        onHomeClick = onHomeClick,
+        onPublishClick = onPublishClick,
+        onProfileClick = onProfileClick
+    )
+}
+
+@Composable
+fun SearchResultsContent(
+    route: String,
+    results: List<TripResult>,
+    onBackClick: () -> Unit,
+    onTripClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
-    val results = listOf(
-        TripResult("CM", "Carlos Mendoza", "4.8", 23, "6:00 AM", 3, "$4"),
-        TripResult("LR", "Luis Rodas", "4.5", 11, "8:30 AM", 1, "$5"),
-        TripResult("AP", "Ana Ponce", "4.9", 38, "10:00 AM", 2, "$4")
-    )
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +90,7 @@ fun SearchResultsScreen(
                 modifier = Modifier.align(Alignment.CenterStart)
             )
         }
-        Divider(color = MaterialTheme.colorScheme.outlineVariant)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         // Filter chips
         Row(
@@ -85,7 +107,7 @@ fun SearchResultsScreen(
         }
 
         Text(
-            text = "3 viajes disponibles",
+            text = "${results.size} viajes disponibles",
             color = RutaTextSecondary,
             fontSize = 13.sp,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
@@ -190,5 +212,13 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun SearchResultsScreenPreview() {
-    SearchResultsScreen(onBackClick = {}, onTripClick = {}, onPublishClick = {}, onProfileClick = {}, onHomeClick = {})
+    SearchResultsContent(
+        route = "Manta → Guayaquil",
+        results = listOf(TripResult("CM", "Carlos Mendoza", "4.8", 23, "6:00 AM", 3, "$4")),
+        onBackClick = {},
+        onTripClick = {},
+        onHomeClick = {},
+        onPublishClick = {},
+        onProfileClick = {}
+    )
 }

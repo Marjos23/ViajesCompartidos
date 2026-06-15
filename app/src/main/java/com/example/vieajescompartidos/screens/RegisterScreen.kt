@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,23 +18,70 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
+import com.example.vieajescompartidos.ui.viewmodel.RegisterViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
 
 @Composable
 fun RegisterScreen(
     onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    viewModel: RegisterViewModel = viewModel(factory = ViewModelFactory())
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.isRegistrationSuccessful) {
+        if (uiState.isRegistrationSuccessful) {
+            onRegisterClick()
+        }
+    }
+
+    RegisterContent(
+        nombres = uiState.nombres,
+        apellidos = uiState.apellidos,
+        cedula = uiState.cedula,
+        fechaNacimiento = uiState.fechaNacimiento,
+        telefono = uiState.telefono,
+        email = uiState.email,
+        password = uiState.password,
+        confirmPassword = uiState.confirmPassword,
+        onNombresChange = viewModel::onNombresChange,
+        onApellidosChange = viewModel::onApellidosChange,
+        onCedulaChange = viewModel::onCedulaChange,
+        onFechaNacimientoChange = viewModel::onFechaNacimientoChange,
+        onTelefonoChange = viewModel::onTelefonoChange,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+        onRegisterClick = viewModel::register,
+        onLoginClick = onLoginClick
+    )
+}
+
+@Composable
+fun RegisterContent(
+    nombres: String,
+    apellidos: String,
+    cedula: String,
+    fechaNacimiento: String,
+    telefono: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    onNombresChange: (String) -> Unit,
+    onApellidosChange: (String) -> Unit,
+    onCedulaChange: (String) -> Unit,
+    onFechaNacimientoChange: (String) -> Unit,
+    onTelefonoChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
-    var nombres by remember { mutableStateOf("") }
-    var apellidos by remember { mutableStateOf("") }
-    var cedula by remember { mutableStateOf("") }
-    var fechaNacimiento by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +108,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Nombres",
             value = nombres,
-            onValueChange = { nombres = it },
+            onValueChange = onNombresChange,
             placeholder = "Ej: Valentina",
             keyboardType = KeyboardType.Text
         )
@@ -72,7 +118,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Apellidos",
             value = apellidos,
-            onValueChange = { apellidos = it },
+            onValueChange = onApellidosChange,
             placeholder = "Ej: Torres",
             keyboardType = KeyboardType.Text
         )
@@ -82,7 +128,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Cédula",
             value = cedula,
-            onValueChange = { cedula = it },
+            onValueChange = onCedulaChange,
             placeholder = "1234567890",
             keyboardType = KeyboardType.Number
         )
@@ -92,7 +138,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Fecha de nacimiento",
             value = fechaNacimiento,
-            onValueChange = { fechaNacimiento = it },
+            onValueChange = onFechaNacimientoChange,
             placeholder = "DD/MM/AAAA",
             keyboardType = KeyboardType.Number
         )
@@ -102,7 +148,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Teléfono",
             value = telefono,
-            onValueChange = { telefono = it },
+            onValueChange = onTelefonoChange,
             placeholder = "+593 99 999 9999",
             keyboardType = KeyboardType.Phone
         )
@@ -112,7 +158,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Correo electrónico",
             value = email,
-            onValueChange = { email = it },
+            onValueChange = onEmailChange,
             placeholder = "ejemplo@correo.com",
             keyboardType = KeyboardType.Email
         )
@@ -122,7 +168,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Contraseña",
             value = password,
-            onValueChange = { password = it },
+            onValueChange = onPasswordChange,
             placeholder = "••••••••",
             keyboardType = KeyboardType.Password,
             isPassword = true
@@ -133,7 +179,7 @@ fun RegisterScreen(
         RegisterField(
             label = "Confirmar contraseña",
             value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            onValueChange = onConfirmPasswordChange,
             placeholder = "••••••••",
             keyboardType = KeyboardType.Password,
             isPassword = true
@@ -225,5 +271,24 @@ private fun RegisterField(
 @Preview
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen(onRegisterClick = {}, onLoginClick = {})
+    RegisterContent(
+        nombres = "",
+        apellidos = "",
+        cedula = "",
+        fechaNacimiento = "",
+        telefono = "",
+        email = "",
+        password = "",
+        confirmPassword = "",
+        onNombresChange = {},
+        onApellidosChange = {},
+        onCedulaChange = {},
+        onFechaNacimientoChange = {},
+        onTelefonoChange = {},
+        onEmailChange = {},
+        onPasswordChange = {},
+        onConfirmPasswordChange = {},
+        onRegisterClick = {},
+        onLoginClick = {}
+    )
 }

@@ -22,6 +22,22 @@ class ViewModelFactory : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 PublishTripViewModel() as T
             }
+            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                RegisterViewModel() as T
+            }
+            modelClass.isAssignableFrom(SearchResultsViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                SearchResultsViewModel() as T
+            }
+            modelClass.isAssignableFrom(TripDetailViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                TripDetailViewModel() as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                @Suppress("UNCHECKED_CAST")
+                ProfileViewModel() as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
