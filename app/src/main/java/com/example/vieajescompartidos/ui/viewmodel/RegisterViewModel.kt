@@ -1,10 +1,13 @@
 package com.example.vieajescompartidos.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.vieajescompartidos.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class RegisterUiState(
     val nombres: String = "",
@@ -20,7 +23,7 @@ data class RegisterUiState(
     val isRegistrationSuccessful: Boolean = false
 )
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
 
@@ -34,7 +37,22 @@ class RegisterViewModel : ViewModel() {
     fun onConfirmPasswordChange(confirm: String) { _uiState.update { it.copy(confirmPassword = confirm) } }
 
     fun register() {
-        // Simulación lógica de registro
-        _uiState.update { it.copy(isRegistrationSuccessful = true) }
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            val state = _uiState.value
+            val result = authRepository.register(
+                nombres = state.nombres,
+                apellidos = state.apellidos,
+                cedula = state.cedula,
+                telefono = state.telefono,
+                email = state.email,
+                password = state.password
+            )
+            result.onSuccess {
+                _uiState.update { it.copy(isLoading = false, isRegistrationSuccessful = true) }
+            }.onFailure { error ->
+                _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
+            }
+        }
     }
 }

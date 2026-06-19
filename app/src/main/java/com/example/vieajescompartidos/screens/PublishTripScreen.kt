@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
@@ -35,6 +36,12 @@ fun PublishTripScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(uiState.isPublishSuccessful) {
+        if (uiState.isPublishSuccessful) {
+            onPublishClick()
+        }
+    }
+
     PublishTripContent(
         origen = uiState.origen,
         destino = uiState.destino,
@@ -43,6 +50,8 @@ fun PublishTripScreen(
         seats = uiState.seats,
         price = uiState.price,
         descripcion = uiState.descripcion,
+        isLoading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
         onOrigenChange = viewModel::onOrigenChange,
         onDestinoChange = viewModel::onDestinoChange,
         onFechaChange = viewModel::onFechaChange,
@@ -51,7 +60,7 @@ fun PublishTripScreen(
         onPriceChange = viewModel::onPriceChange,
         onDescripcionChange = viewModel::onDescripcionChange,
         onBackClick = onBackClick,
-        onPublishClick = onPublishClick,
+        onPublishClick = viewModel::publish,
         onHomeClick = onHomeClick,
         onSearchClick = onSearchClick,
         onProfileClick = onProfileClick
@@ -67,6 +76,8 @@ fun PublishTripContent(
     seats: Int,
     price: String,
     descripcion: String,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onOrigenChange: (String) -> Unit,
     onDestinoChange: (String) -> Unit,
     onFechaChange: (String) -> Unit,
@@ -222,23 +233,37 @@ fun PublishTripContent(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            errorMessage?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             // Publicar
             Button(
                 onClick = onPublishClick,
+                enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = RutaGreen)
             ) {
-                Text(
-                    text = "🚗  Publicar viaje",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                if (isLoading) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text(
+                        text = "🚗  Publicar viaje",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))

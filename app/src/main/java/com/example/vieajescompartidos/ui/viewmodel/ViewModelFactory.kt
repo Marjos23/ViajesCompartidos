@@ -4,11 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vieajescompartidos.data.repository.AuthRepository
 import com.example.vieajescompartidos.data.repository.FakeAuthRepository
+import com.example.vieajescompartidos.data.repository.FakeTripRepository
+import com.example.vieajescompartidos.data.repository.FakeUserRepository
+import com.example.vieajescompartidos.data.repository.TripRepository
+import com.example.vieajescompartidos.data.repository.UserRepository
 
 class ViewModelFactory : ViewModelProvider.Factory {
     
     companion object {
         private val authRepository: AuthRepository by lazy { FakeAuthRepository() }
+        private val tripRepository: TripRepository by lazy { FakeTripRepository() }
+        private val userRepository: UserRepository by lazy { FakeUserRepository() }
     }
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -19,27 +25,27 @@ class ViewModelFactory : ViewModelProvider.Factory {
             }
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                HomeViewModel() as T
+                HomeViewModel(userRepository) as T
             }
             modelClass.isAssignableFrom(PublishTripViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                PublishTripViewModel() as T
+                PublishTripViewModel(tripRepository) as T
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                RegisterViewModel() as T
+                RegisterViewModel(authRepository) as T
             }
             modelClass.isAssignableFrom(SearchResultsViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                SearchResultsViewModel() as T
+                SearchResultsViewModel(tripRepository) as T
             }
             modelClass.isAssignableFrom(TripDetailViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                TripDetailViewModel() as T
+                TripDetailViewModel(tripRepository) as T
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 @Suppress("UNCHECKED_CAST")
-                ProfileViewModel() as T
+                ProfileViewModel(userRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

@@ -48,6 +48,8 @@ fun RegisterScreen(
         email = uiState.email,
         password = uiState.password,
         confirmPassword = uiState.confirmPassword,
+        isLoading = uiState.isLoading,
+        errorMessage = uiState.errorMessage,
         onNombresChange = viewModel::onNombresChange,
         onApellidosChange = viewModel::onApellidosChange,
         onCedulaChange = viewModel::onCedulaChange,
@@ -71,6 +73,8 @@ fun RegisterContent(
     email: String,
     password: String,
     confirmPassword: String,
+    isLoading: Boolean = false,
+    errorMessage: String? = null,
     onNombresChange: (String) -> Unit,
     onApellidosChange: (String) -> Unit,
     onCedulaChange: (String) -> Unit,
@@ -194,22 +198,36 @@ fun RegisterContent(
             modifier = Modifier.padding(top = 4.dp)
         )
 
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = onRegisterClick,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(containerColor = RutaGreen)
         ) {
-            Text(
-                text = "Crear cuenta",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+            } else {
+                Text(
+                    text = "Crear cuenta",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(20.dp))

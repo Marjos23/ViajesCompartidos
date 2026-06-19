@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vieajescompartidos.data.model.Trip
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 import com.example.vieajescompartidos.ui.viewmodel.SearchResultsViewModel
@@ -27,16 +28,6 @@ import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
 private val RutaGreenLight2 = Color(0xFFF0FDF4)
 private val RutaGreenBorder2 = Color(0xFF86EFAC)
 private val RutaGreenDark2 = Color(0xFF166534)
-
-data class TripResult(
-    val initials: String,
-    val driverName: String,
-    val rating: String,
-    val trips: Int,
-    val hour: String,
-    val seats: Int,
-    val price: String
-)
 
 @Composable
 fun SearchResultsScreen(
@@ -63,7 +54,7 @@ fun SearchResultsScreen(
 @Composable
 fun SearchResultsContent(
     route: String,
-    results: List<TripResult>,
+    results: List<Trip>,
     onBackClick: () -> Unit,
     onTripClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -149,7 +140,7 @@ fun FilterChipItem(label: String, selected: Boolean) {
 }
 
 @Composable
-fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
+fun TripResultCard(trip: Trip, onViewClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
@@ -169,7 +160,7 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
                         .background(RutaGreenLight2, CircleShape)
                 ) {
                     Text(
-                        text = trip.initials,
+                        text = trip.driverInitials,
                         color = RutaGreenDark2,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
@@ -184,7 +175,7 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "⭐ ${trip.rating}  •  ${trip.trips} viajes",
+                        text = "⭐ ${trip.rating}  •  ${trip.completedTrips} viajes",
                         color = RutaTextSecondary,
                         fontSize = 12.sp
                     )
@@ -201,7 +192,7 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "🕐 ${trip.hour}  •  💺 ${trip.seats} cupo${if (trip.seats != 1) "s" else ""}  •  💵 ${trip.price}",
+                text = "🕐 ${trip.departureTime}  •  💺 ${trip.availableSeats} cupo${if (trip.availableSeats != 1) "s" else ""}  •  💵 ${trip.price}",
                 color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 12.sp
             )
@@ -214,7 +205,7 @@ fun TripResultCard(trip: TripResult, onViewClick: () -> Unit) {
 fun SearchResultsScreenPreview() {
     SearchResultsContent(
         route = "Manta → Guayaquil",
-        results = listOf(TripResult("CM", "Carlos Mendoza", "4.8", 23, "6:00 AM", 3, "$4")),
+        results = listOf(Trip("1", "Carlos Mendoza", "CM", "4.8", 23, "Manta", "Guayaquil", "6:00 AM", 3, 4, "$4", "Toyota Corolla")),
         onBackClick = {},
         onTripClick = {},
         onHomeClick = {},
