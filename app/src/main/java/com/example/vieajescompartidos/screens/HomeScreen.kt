@@ -20,7 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 import com.example.vieajescompartidos.ui.viewmodel.HomeViewModel
-import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
+import com.example.vieajescompartidos.di.ViewModelFactory
 
 val RutaGreenLight = Color(0xFFF0FDF4)
 val RutaGreenBorder = Color(0xFF86EFAC)

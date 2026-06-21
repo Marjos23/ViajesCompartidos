@@ -23,7 +23,7 @@ import com.example.vieajescompartidos.data.model.Trip
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 import com.example.vieajescompartidos.ui.viewmodel.SearchResultsViewModel
-import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
+import com.example.vieajescompartidos.di.ViewModelFactory
 
 private val RutaGreenLight2 = Color(0xFFF0FDF4)
 private val RutaGreenBorder2 = Color(0xFF86EFAC)

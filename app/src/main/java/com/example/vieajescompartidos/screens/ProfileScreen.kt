@@ -23,7 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.theme.RutaGreen
 import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 import com.example.vieajescompartidos.ui.viewmodel.ProfileViewModel
-import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
+import com.example.vieajescompartidos.di.ViewModelFactory
 
 private val ProfileGreenLight = Color(0xFFD1FAE5)
 private val ProfileGreenDark = Color(0xFF065F46)

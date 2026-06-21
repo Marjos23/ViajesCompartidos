@@ -28,7 +28,7 @@ import com.example.vieajescompartidos.ui.theme.RutaTextSecondary
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vieajescompartidos.ui.viewmodel.LoginViewModel
-import com.example.vieajescompartidos.ui.viewmodel.ViewModelFactory
+import com.example.vieajescompartidos.di.ViewModelFactory
 
 @Composable
 fun LoginScreen(

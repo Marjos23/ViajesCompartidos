@@ -1,4 +1,4 @@
-package com.example.vieajescompartidos.ui.viewmodel
+package com.example.vieajescompartidos.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,9 +8,16 @@ import com.example.vieajescompartidos.data.repository.FakeTripRepository
 import com.example.vieajescompartidos.data.repository.FakeUserRepository
 import com.example.vieajescompartidos.data.repository.TripRepository
 import com.example.vieajescompartidos.data.repository.UserRepository
+import com.example.vieajescompartidos.ui.viewmodel.HomeViewModel
+import com.example.vieajescompartidos.ui.viewmodel.LoginViewModel
+import com.example.vieajescompartidos.ui.viewmodel.ProfileViewModel
+import com.example.vieajescompartidos.ui.viewmodel.PublishTripViewModel
+import com.example.vieajescompartidos.ui.viewmodel.RegisterViewModel
+import com.example.vieajescompartidos.ui.viewmodel.SearchResultsViewModel
+import com.example.vieajescompartidos.ui.viewmodel.TripDetailViewModel
 
 class ViewModelFactory : ViewModelProvider.Factory {
-    
+
     companion object {
         private val authRepository: AuthRepository by lazy { FakeAuthRepository() }
         private val tripRepository: TripRepository by lazy { FakeTripRepository() }
