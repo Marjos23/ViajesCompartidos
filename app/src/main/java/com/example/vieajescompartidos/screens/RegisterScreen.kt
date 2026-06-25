@@ -29,7 +29,8 @@ import com.example.vieajescompartidos.di.ViewModelFactory
 fun RegisterScreen(
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit,
-    viewModel: RegisterViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: RegisterViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

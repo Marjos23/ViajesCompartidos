@@ -34,7 +34,8 @@ import com.example.vieajescompartidos.di.ViewModelFactory
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onRegisterClick: () -> Unit,
-    viewModel: LoginViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: LoginViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

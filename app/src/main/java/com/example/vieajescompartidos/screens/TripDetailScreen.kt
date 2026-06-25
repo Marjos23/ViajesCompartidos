@@ -34,9 +34,11 @@ fun TripDetailScreen(
     onJoinClick: () -> Unit,
     onMessageClick: () -> Unit,
     onHomeClick: () -> Unit = {},
+    onSearchClick: (String, String) -> Unit = { _, _ -> },
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit,
-    viewModel: TripDetailViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: TripDetailViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -56,6 +58,7 @@ fun TripDetailScreen(
         onJoinClick = onJoinClick,
         onMessageClick = onMessageClick,
         onHomeClick = onHomeClick,
+        onSearchClick = onSearchClick,
         onPublishClick = onPublishClick,
         onProfileClick = onProfileClick
     )
@@ -78,6 +81,7 @@ fun TripDetailContent(
     onJoinClick: () -> Unit,
     onMessageClick: () -> Unit,
     onHomeClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -246,7 +250,13 @@ fun TripDetailContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        BottomNavBar(activeTab = "buscar", onHomeClick = onHomeClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
+        BottomNavBar(
+            activeTab = "buscar",
+            onHomeClick = onHomeClick,
+            onSearchClick = { o, d -> onSearchClick(o, d) },
+            onPublishClick = onPublishClick,
+            onProfileClick = onProfileClick
+        )
     }
 }
 
@@ -279,6 +289,7 @@ fun TripDetailScreenPreview() {
         onJoinClick = {},
         onMessageClick = {},
         onHomeClick = {},
+        onSearchClick = { _, _ -> },
         onPublishClick = {},
         onProfileClick = {}
     )

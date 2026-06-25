@@ -29,10 +29,11 @@ val RutaGreenDark = Color(0xFF166534)
 @Composable
 fun HomeScreen(
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit,
-    viewModel: HomeViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: HomeViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -59,7 +60,7 @@ fun HomeContent(
     onOrigenChange: (String) -> Unit,
     onDestinoChange: (String) -> Unit,
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -179,7 +180,7 @@ fun HomeContent(
 
             // Botón buscar
             Button(
-                onClick = onSearchClick,
+                onClick = { onSearchClick(origen, destino) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -236,7 +237,13 @@ fun HomeContent(
         }
 
         // Bottom Navigation Bar
-        BottomNavBar(activeTab = "inicio", onHomeClick = onHomeClick, onSearchClick = onSearchClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
+        BottomNavBar(
+            activeTab = "inicio", 
+            onHomeClick = onHomeClick, 
+            onSearchClick = { o, d -> onSearchClick(o, d) },
+            onPublishClick = onPublishClick, 
+            onProfileClick = onProfileClick
+        )
     }
 }
 
@@ -261,7 +268,7 @@ fun RecentSearchItem(text: String) {
 fun BottomNavBar(
     activeTab: String,
     onHomeClick: () -> Unit = {},
-    onSearchClick: () -> Unit = {},
+    onSearchClick: (String, String) -> Unit = { _, _ -> },
     onPublishClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
@@ -276,7 +283,7 @@ fun BottomNavBar(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         NavBarItem(icon = "🏠", label = "Inicio", color = if (activeTab == "inicio") activeColor else inactiveColor, onClick = onHomeClick)
-        NavBarItem(icon = "🔍", label = "Buscar", color = if (activeTab == "buscar") activeColor else inactiveColor, onClick = onSearchClick)
+        NavBarItem(icon = "🔍", label = "Buscar", color = if (activeTab == "buscar") activeColor else inactiveColor, onClick = { onSearchClick(" ", " ") })
         NavBarItem(icon = "➕", label = "Publicar", color = if (activeTab == "publicar") activeColor else inactiveColor, onClick = onPublishClick)
         NavBarItem(icon = "👤", label = "Perfil", color = if (activeTab == "perfil") activeColor else inactiveColor, onClick = onProfileClick)
     }
@@ -306,7 +313,7 @@ fun HomeScreenPreview() {
         onOrigenChange = {},
         onDestinoChange = {},
         onHomeClick = {},
-        onSearchClick = {},
+        onSearchClick = { _, _ -> },
         onPublishClick = {},
         onProfileClick = {}
     )

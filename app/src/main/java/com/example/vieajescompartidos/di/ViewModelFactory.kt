@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.vieajescompartidos.data.repository.AuthRepository
 import com.example.vieajescompartidos.data.repository.FakeAuthRepository
-import com.example.vieajescompartidos.data.repository.FakeTripRepository
 import com.example.vieajescompartidos.data.repository.FakeUserRepository
 import com.example.vieajescompartidos.data.repository.TripRepository
 import com.example.vieajescompartidos.data.repository.UserRepository
@@ -16,13 +15,11 @@ import com.example.vieajescompartidos.ui.viewmodel.RegisterViewModel
 import com.example.vieajescompartidos.ui.viewmodel.SearchResultsViewModel
 import com.example.vieajescompartidos.ui.viewmodel.TripDetailViewModel
 
-class ViewModelFactory : ViewModelProvider.Factory {
-
-    companion object {
-        private val authRepository: AuthRepository by lazy { FakeAuthRepository() }
-        private val tripRepository: TripRepository by lazy { FakeTripRepository() }
-        private val userRepository: UserRepository by lazy { FakeUserRepository() }
-    }
+class ViewModelFactory(
+    private val tripRepository: TripRepository,
+    private val authRepository: AuthRepository = FakeAuthRepository(),
+    private val userRepository: UserRepository = FakeUserRepository()
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {

@@ -34,7 +34,7 @@ private val ProfileYellowText = Color(0xFF92400E)
 @Composable
 fun ProfileScreen(
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onPublishClick: () -> Unit,
     onEditProfileClick: () -> Unit = {},
     onVehicleClick: () -> Unit = {},
@@ -42,7 +42,8 @@ fun ProfileScreen(
     onHistoryClick: () -> Unit = {},
     onSecurityClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
-    viewModel: ProfileViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: ProfileViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -76,7 +77,7 @@ fun ProfileContent(
     pendingTrips: String,
     isVerified: Boolean,
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onPublishClick: () -> Unit,
     onEditProfileClick: () -> Unit,
     onVehicleClick: () -> Unit,
@@ -224,7 +225,7 @@ fun ProfileContent(
         BottomNavBar(
             activeTab = "perfil",
             onHomeClick = onHomeClick,
-            onSearchClick = onSearchClick,
+            onSearchClick = { o, d -> onSearchClick(o, d) },
             onPublishClick = onPublishClick
         )
     }
@@ -297,7 +298,7 @@ fun ProfileScreenPreview() {
         pendingTrips = "3",
         isVerified = true,
         onHomeClick = {},
-        onSearchClick = {},
+        onSearchClick = { _, _ -> },
         onPublishClick = {},
         onEditProfileClick = {},
         onVehicleClick = {},

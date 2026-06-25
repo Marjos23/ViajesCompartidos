@@ -30,9 +30,10 @@ fun PublishTripScreen(
     onBackClick: () -> Unit,
     onPublishClick: () -> Unit,
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onProfileClick: () -> Unit,
-    viewModel: PublishTripViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: PublishTripViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -88,7 +89,7 @@ fun PublishTripContent(
     onBackClick: () -> Unit,
     onPublishClick: () -> Unit,
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onProfileClick: () -> Unit
 ) {
     Column(
@@ -339,7 +340,7 @@ fun PublishTripScreenPreview() {
         onBackClick = {},
         onPublishClick = {},
         onHomeClick = {},
-        onSearchClick = {},
+        onSearchClick = { _, _ -> },
         onProfileClick = {}
     )
 }

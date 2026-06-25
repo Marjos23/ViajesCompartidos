@@ -19,9 +19,10 @@ class SearchResultsViewModel(private val tripRepository: TripRepository) : ViewM
     private val _uiState = MutableStateFlow(SearchResultsUiState(isLoading = true))
     val uiState: StateFlow<SearchResultsUiState> = _uiState.asStateFlow()
 
-    init {
+    fun search(origin: String, destination: String) {
         viewModelScope.launch {
-            val result = tripRepository.getTrips("Manta", "Guayaquil")
+            _uiState.update { it.copy(isLoading = true, route = "$origin → $destination") }
+            val result = tripRepository.getTrips(origin, destination)
             result.onSuccess { trips ->
                 _uiState.update { it.copy(results = trips, isLoading = false) }
             }.onFailure {

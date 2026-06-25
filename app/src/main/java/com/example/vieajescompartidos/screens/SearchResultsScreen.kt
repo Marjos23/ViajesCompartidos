@@ -31,14 +31,23 @@ private val RutaGreenDark2 = Color(0xFF166534)
 
 @Composable
 fun SearchResultsScreen(
+    origin: String,
+    destination: String,
     onBackClick: () -> Unit,
     onTripClick: () -> Unit,
     onHomeClick: () -> Unit = {},
+    onSearchClick: (String, String) -> Unit = { _, _ -> },
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit,
-    viewModel: SearchResultsViewModel = viewModel(factory = ViewModelFactory())
+    factory: androidx.lifecycle.ViewModelProvider.Factory,
+    viewModel: SearchResultsViewModel = viewModel(factory = factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Ejecuta la búsqueda al abrir la pantalla con los datos reales
+    androidx.compose.runtime.LaunchedEffect(origin, destination) {
+        viewModel.search(origin, destination)
+    }
 
     SearchResultsContent(
         route = uiState.route,
@@ -46,6 +55,7 @@ fun SearchResultsScreen(
         onBackClick = onBackClick,
         onTripClick = onTripClick,
         onHomeClick = onHomeClick,
+        onSearchClick = onSearchClick,
         onPublishClick = onPublishClick,
         onProfileClick = onProfileClick
     )
@@ -58,6 +68,7 @@ fun SearchResultsContent(
     onBackClick: () -> Unit,
     onTripClick: () -> Unit,
     onHomeClick: () -> Unit,
+    onSearchClick: (String, String) -> Unit,
     onPublishClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -119,7 +130,13 @@ fun SearchResultsContent(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        BottomNavBar(activeTab = "buscar", onHomeClick = onHomeClick, onPublishClick = onPublishClick, onProfileClick = onProfileClick)
+        BottomNavBar(
+            activeTab = "buscar",
+            onHomeClick = onHomeClick,
+            onSearchClick = { o, d -> onSearchClick(o, d) },
+            onPublishClick = onPublishClick,
+            onProfileClick = onProfileClick
+        )
     }
 }
 
@@ -209,6 +226,7 @@ fun SearchResultsScreenPreview() {
         onBackClick = {},
         onTripClick = {},
         onHomeClick = {},
+        onSearchClick = { _, _ -> },
         onPublishClick = {},
         onProfileClick = {}
     )
