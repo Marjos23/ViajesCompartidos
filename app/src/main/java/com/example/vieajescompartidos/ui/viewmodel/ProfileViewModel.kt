@@ -2,6 +2,7 @@ package com.example.vieajescompartidos.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vieajescompartidos.data.repository.AuthRepository
 import com.example.vieajescompartidos.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,17 +18,30 @@ data class ProfileUiState(
     val totalTrips: String = "",
     val pendingTrips: String = "",
     val isVerified: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
 )
 
-class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
+class ProfileViewModel(
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     init {
+        loadProfile()
+    }
+
+    private fun loadProfile() {
+        val userId = authRepository.getCurrentUserId()
+        if (userId == null) {
+            _uiState.update { it.copy(isLoading = false, errorMessage = "No hay sesión activa") }
+            return
+        }
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            val result = userRepository.getUserProfile("1")
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            val result = userRepository.getUserProfile(userId)
             result.onSuccess { user ->
                 _uiState.update {
                     it.copy(
@@ -38,12 +52,19 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
                         totalTrips = user.totalTrips,
                         pendingTrips = user.pendingTrips,
                         isVerified = user.isVerified,
-                        isLoading = false
+                        isLoading = false,
+                        errorMessage = null
                     )
                 }
-            }.onFailure {
-                _uiState.update { it.copy(isLoading = false) }
+            }.onFailure { error ->
+                _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
             }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            authRepository.logout()
         }
     }
 }

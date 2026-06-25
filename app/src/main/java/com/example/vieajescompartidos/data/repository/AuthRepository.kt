@@ -14,6 +14,8 @@ interface AuthRepository {
         email: String,
         password: String
     ): Result<Boolean>
+    suspend fun logout(): Result<Unit>
+    fun getCurrentUserId(): String?
 }
 
 class FakeAuthRepository : AuthRepository {
@@ -41,4 +43,11 @@ class FakeAuthRepository : AuthRepository {
             Result.failure(Exception("Datos inválidos. Verifica todos los campos."))
         }
     }
+
+    override suspend fun logout(): Result<Unit> = withContext(Dispatchers.IO) {
+        delay(500)
+        Result.success(Unit)
+    }
+
+    override fun getCurrentUserId(): String? = "1"
 }

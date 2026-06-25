@@ -24,13 +24,9 @@ import com.example.vieajescompartidos.screens.TripDetailScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // 1. Obtenemos la base de datos y el repo
-        val app = application as ViajesApplication
-        val tripRepository = com.example.vieajescompartidos.data.repository.RoomTripRepository(app.database.tripDao())
-        
-        // 2. Creamos el Factory
-        val factory = com.example.vieajescompartidos.di.ViewModelFactory(tripRepository)
+
+        // Creamos el Factory con repositorios de Supabase (valores por defecto)
+        val factory = com.example.vieajescompartidos.di.ViewModelFactory()
 
         enableEdgeToEdge()
         setContent {
@@ -125,7 +121,7 @@ fun AppNavigation(
             PublishTripScreen(
                 factory = factory,
                 onBackClick = { navController.popBackStack() },
-                onPublishClick = { /* TODO */ },
+                onPublishClick = { navController.navigate("home") { popUpTo("home") { inclusive = true } } },
                 onHomeClick = { navController.navigate("home") { popUpTo("home") { inclusive = true } } },
                 onSearchClick = { origin, destination -> 
                     navController.navigate("search/$origin/$destination") 
@@ -141,7 +137,8 @@ fun AppNavigation(
                 onSearchClick = { origin, destination -> 
                     navController.navigate("search/$origin/$destination") 
                 },
-                onPublishClick = { navController.navigate("publish") }
+                onPublishClick = { navController.navigate("publish") },
+                onLogoutClick = { navController.navigate("login") { popUpTo(0) { inclusive = true } } }
             )
         }
     }

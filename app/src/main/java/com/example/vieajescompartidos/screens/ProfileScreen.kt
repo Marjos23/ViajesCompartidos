@@ -47,6 +47,15 @@ fun ProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    if (uiState.errorMessage != null) {
+        Text(
+            text = uiState.errorMessage!!,
+            color = Color.Red,
+            fontSize = 14.sp,
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+
     ProfileContent(
         userName = uiState.userName,
         userEmail = uiState.userEmail,
@@ -63,7 +72,10 @@ fun ProfileScreen(
         onNotificationsClick = onNotificationsClick,
         onHistoryClick = onHistoryClick,
         onSecurityClick = onSecurityClick,
-        onLogoutClick = onLogoutClick
+        onLogoutClick = {
+            viewModel.logout()
+            onLogoutClick()
+        }
     )
 }
 
